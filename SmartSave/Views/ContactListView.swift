@@ -8,7 +8,7 @@ struct ContactListView: View {
         NavigationStack {
             List {
                 ForEach(vm.contacts, id: \.id) { contact in
-                    NavigationLink(destination: Text("Detail: \(contact.name ?? "")")) {
+                    NavigationLink(destination: ContactDetailView(contact: contact, onSave: vm.fetch)) {
                         ContactRowView(contact: contact)
                     }
                 }
