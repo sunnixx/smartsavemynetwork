@@ -21,3 +21,4 @@ extension Contact {
         return NSFetchRequest<Contact>(entityName: "Contact")
     }
 }
+
