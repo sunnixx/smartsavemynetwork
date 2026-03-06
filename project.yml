@@ -1,0 +1,43 @@
+name: SmartSave
+options:
+  bundleIdPrefix: com.smartsave
+  deploymentTarget:
+    iOS: "17.0"
+  xcodeVersion: "16.0"
+  generateEmptyDirectories: true
+
+settings:
+  base:
+    SWIFT_VERSION: 6.0
+    DEVELOPMENT_TEAM: ""
+    PRODUCT_BUNDLE_IDENTIFIER: com.smartsave.app
+
+targets:
+  SmartSave:
+    type: application
+    platform: iOS
+    sources:
+      - SmartSave
+    resources:
+      - SmartSave/Resources
+    settings:
+      base:
+        INFOPLIST_FILE: SmartSave/Info.plist
+        PRODUCT_NAME: SmartSave
+    coreDataModels:
+      - SmartSave/Models/SmartSave.xcdatamodeld
+    entitlements:
+      path: SmartSave/SmartSave.entitlements
+      properties:
+        com.apple.developer.speech-recognition: true
+
+  SmartSaveTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - SmartSaveTests
+    dependencies:
+      - target: SmartSave
+    settings:
+      base:
+        PRODUCT_NAME: SmartSaveTests
