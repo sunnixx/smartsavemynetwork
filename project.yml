@@ -24,6 +24,7 @@ targets:
       base:
         INFOPLIST_FILE: SmartSave/Info.plist
         PRODUCT_NAME: SmartSave
+        PRODUCT_BUNDLE_IDENTIFIER: com.smartsave.app
     coreDataModels:
       - SmartSave/Models/SmartSave.xcdatamodeld
     entitlements:
