@@ -3,14 +3,14 @@ import SwiftUI
 struct AddContactView: View {
     @Environment(\.dismiss) private var dismiss
     @StateObject private var vm = AddContactViewModel()
+    @State private var showScanner = false
     @State private var showForm = false
 
     var body: some View {
         NavigationStack {
             VStack(spacing: 24) {
                 Button {
-                    // Scanner will be added in Task 7
-                    showForm = true
+                    showScanner = true
                 } label: {
                     Label("Scan Business Card", systemImage: "camera.viewfinder")
                         .frame(maxWidth: .infinity)
@@ -36,6 +36,13 @@ struct AddContactView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") { dismiss() }
+                }
+            }
+            .sheet(isPresented: $showScanner) {
+                CardScannerView { parsed, image in
+                    vm.populate(from: parsed, image: image)
+                    showScanner = false
+                    showForm = true
                 }
             }
             .sheet(isPresented: $showForm) {
