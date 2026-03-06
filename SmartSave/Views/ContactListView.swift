@@ -3,31 +3,48 @@ import SwiftUI
 struct ContactListView: View {
     @StateObject private var vm = ContactListViewModel()
     @State private var showAddSheet = false
+    @State private var navigationPath = NavigationPath()
 
     var body: some View {
-        NavigationStack {
-            List {
-                ForEach(vm.contacts, id: \.id) { contact in
-                    NavigationLink(destination: ContactDetailView(contact: contact, onSave: vm.fetch)) {
-                        ContactRowView(contact: contact)
+        NavigationStack(path: $navigationPath) {
+            if vm.contacts.isEmpty {
+                ContentUnavailableView(
+                    vm.searchText.isEmpty ? "No Contacts Yet" : "No Results",
+                    systemImage: "person.crop.circle.badge.plus",
+                    description: Text(vm.searchText.isEmpty ? "Tap + to add your first contact." : "Try a different search.")
+                )
+            } else {
+                List {
+                    ForEach(vm.contacts, id: \.id) { contact in
+                        NavigationLink(value: contact) {
+                            ContactRowView(contact: contact)
+                        }
                     }
-                }
-                .onDelete(perform: vm.delete)
-            }
-            .searchable(text: $vm.searchText, prompt: "Search by name, company, email")
-            .navigationTitle("Contacts")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        showAddSheet = true
-                    } label: {
-                        Image(systemName: "plus")
-                    }
+                    .onDelete(perform: vm.delete)
                 }
             }
-            .sheet(isPresented: $showAddSheet, onDismiss: vm.fetch) {
-                AddContactView()
+        }
+        .searchable(text: $vm.searchText, prompt: "Search by name, company, email")
+        .navigationTitle("Contacts")
+        .navigationDestination(for: Contact.self) { contact in
+            ContactDetailView(contact: contact, onSave: vm.fetch)
+        }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    showAddSheet = true
+                } label: {
+                    Image(systemName: "plus")
+                }
             }
+        }
+        .sheet(isPresented: $showAddSheet, onDismiss: vm.fetch) {
+            AddContactView()
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .openContact)) { note in
+            guard let contactID = note.object as? UUID,
+                  let contact = vm.contacts.first(where: { $0.id == contactID }) else { return }
+            navigationPath.append(contact)
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
             vm.fetch()

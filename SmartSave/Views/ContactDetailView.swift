@@ -25,8 +25,20 @@ struct ContactDetailView: View {
                 DetailRow(label: "Name", value: vm.name)
                 DetailRow(label: "Title", value: vm.title)
                 DetailRow(label: "Company", value: vm.company)
-                DetailRow(label: "Email", value: vm.email)
-                DetailRow(label: "Phone", value: vm.phone)
+                if !vm.email.isEmpty, let url = URL(string: "mailto:\(vm.email)") {
+                    Link(destination: url) {
+                        DetailRow(label: "Email", value: vm.email)
+                    }
+                } else {
+                    DetailRow(label: "Email", value: vm.email)
+                }
+                if !vm.phone.isEmpty, let url = URL(string: "tel:\(vm.phone.filter { $0.isNumber })") {
+                    Link(destination: url) {
+                        DetailRow(label: "Phone", value: vm.phone)
+                    }
+                } else {
+                    DetailRow(label: "Phone", value: vm.phone)
+                }
             }
 
             Section("Conversation Notes") {
