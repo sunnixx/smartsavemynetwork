@@ -73,10 +73,10 @@ struct ContactDetailView: View {
         .navigationTitle(vm.name)
         .navigationBarTitleDisplayMode(.large)
         .sheet(isPresented: $showNotes, onDismiss: vm.save) {
-            NotesPlaceholderView(notes: $vm.conversationNotes, nextSteps: $vm.nextSteps)
+            NotesView(notes: $vm.conversationNotes, nextSteps: $vm.nextSteps)
         }
         .sheet(isPresented: $showReminderPicker) {
-            ReminderPlaceholderView(selectedDate: $vm.followUpDate, onConfirm: {
+            ReminderPickerView(selectedDate: $vm.followUpDate, onConfirm: {
                 showReminderPicker = false
                 vm.save()
             })
@@ -94,61 +94,6 @@ struct DetailRow: View {
                 .foregroundColor(.secondary)
                 .frame(width: 80, alignment: .leading)
             Text(value.isEmpty ? "\u{2014}" : value)
-        }
-    }
-}
-
-// Temporary placeholder - will be replaced in Task 9
-struct NotesPlaceholderView: View {
-    @Binding var notes: String
-    @Binding var nextSteps: String
-    @Environment(\.dismiss) private var dismiss
-
-    var body: some View {
-        NavigationStack {
-            Form {
-                Section("Conversation Notes") {
-                    TextEditor(text: $notes)
-                        .frame(minHeight: 120)
-                }
-                Section("Next Steps") {
-                    TextEditor(text: $nextSteps)
-                        .frame(minHeight: 100)
-                }
-            }
-            .navigationTitle("Notes & Next Steps")
-            .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") { dismiss() }
-                }
-            }
-        }
-    }
-}
-
-// Temporary placeholder - will be replaced in Task 10
-struct ReminderPlaceholderView: View {
-    @Binding var selectedDate: Date?
-    let onConfirm: () -> Void
-    @State private var pickedDate = Date().addingTimeInterval(86400)
-
-    var body: some View {
-        NavigationStack {
-            DatePicker("Follow-up Date", selection: $pickedDate, in: Date()..., displayedComponents: [.date, .hourAndMinute])
-                .datePickerStyle(.graphical)
-                .padding()
-                .navigationTitle("Set Reminder")
-                .toolbar {
-                    ToolbarItem(placement: .cancellationAction) {
-                        Button("Cancel") { onConfirm() }
-                    }
-                    ToolbarItem(placement: .confirmationAction) {
-                        Button("Set") {
-                            selectedDate = pickedDate
-                            onConfirm()
-                        }
-                    }
-                }
         }
     }
 }
