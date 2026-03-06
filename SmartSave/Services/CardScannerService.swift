@@ -1,4 +1,4 @@
-import Vision
+@preconcurrency import Vision
 import UIKit
 
 struct CardScannerService {

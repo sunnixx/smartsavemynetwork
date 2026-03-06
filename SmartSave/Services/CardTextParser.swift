@@ -4,8 +4,12 @@ struct ParsedCard {
     var name: String?
     var title: String?
     var company: String?
-    var email: String?
-    var phone: String?
+    var emails: [String] = []
+    var phones: [String] = []
+
+    // Convenience for single-value access
+    var email: String? { emails.isEmpty ? nil : emails.joined(separator: "\n") }
+    var phone: String? { phones.isEmpty ? nil : phones.joined(separator: "\n") }
 }
 
 struct CardTextParser {
@@ -16,9 +20,9 @@ struct CardTextParser {
         for line in lines {
             let trimmed = line.trimmingCharacters(in: .whitespaces)
             if isEmail(trimmed) {
-                result.email = trimmed
+                result.emails.append(trimmed)
             } else if isPhone(trimmed) {
-                result.phone = trimmed
+                result.phones.append(trimmed)
             } else {
                 remaining.append(trimmed)
             }

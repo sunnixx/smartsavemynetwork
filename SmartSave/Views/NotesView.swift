@@ -10,24 +10,32 @@ struct NotesView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("Conversation Notes") {
+                Section {
                     TextEditor(text: $notes)
                         .frame(minHeight: 120)
                         .onChange(of: voiceNotes.transcript) { _, newValue in
-                            notes = newValue
+                            if !newValue.isEmpty {
+                                notes = newValue
+                            }
                         }
 
                     MicButton(service: voiceNotes, existingText: notes)
+                } header: {
+                    Label("Conversation Notes", systemImage: "text.quote")
                 }
 
-                Section("Next Steps") {
+                Section {
                     TextEditor(text: $nextSteps)
                         .frame(minHeight: 100)
                         .onChange(of: voiceNextSteps.transcript) { _, newValue in
-                            nextSteps = newValue
+                            if !newValue.isEmpty {
+                                nextSteps = newValue
+                            }
                         }
 
                     MicButton(service: voiceNextSteps, existingText: nextSteps)
+                } header: {
+                    Label("Next Steps", systemImage: "arrow.right.circle")
                 }
             }
             .navigationTitle("Notes & Next Steps")
@@ -38,6 +46,7 @@ struct NotesView: View {
                         voiceNextSteps.stopRecording()
                         dismiss()
                     }
+                    .fontWeight(.semibold)
                 }
             }
         }
@@ -56,10 +65,13 @@ struct MicButton: View {
                 service.startRecording(appending: existingText)
             }
         } label: {
-            Label(
-                service.isRecording ? "Stop Recording" : "Speak Notes",
-                systemImage: service.isRecording ? "stop.circle.fill" : "mic.circle"
-            )
+            HStack(spacing: 8) {
+                Image(systemName: service.isRecording ? "stop.circle.fill" : "mic.circle.fill")
+                    .font(.title3)
+                    .symbolEffect(.pulse, isActive: service.isRecording)
+                Text(service.isRecording ? "Stop Recording" : "Speak Notes")
+                    .font(.subheadline.weight(.medium))
+            }
             .foregroundColor(service.isRecording ? .red : .accentColor)
         }
     }

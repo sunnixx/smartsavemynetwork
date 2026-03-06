@@ -20,6 +20,12 @@
     <string>Used to transcribe your spoken notes</string>
     <key>NSMicrophoneUsageDescription</key>
     <string>Used to record voice notes</string>
+    <key>NSContactsUsageDescription</key>
+    <string>Used to save contacts to your device</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Used to retrieve your saved business card images after reinstalling the app</string>
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>Used to save business card images so they persist if you reinstall the app</string>
     <key>UIApplicationSceneManifest</key>
     <dict>
         <key>UIApplicationSupportsMultipleScenes</key>
@@ -27,5 +33,18 @@
     </dict>
     <key>UILaunchScreen</key>
     <dict/>
+    <key>UISupportedInterfaceOrientations</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string>
+        <string>UIInterfaceOrientationLandscapeLeft</string>
+        <string>UIInterfaceOrientationLandscapeRight</string>
+    </array>
+    <key>UISupportedInterfaceOrientations~ipad</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string>
+        <string>UIInterfaceOrientationPortraitUpsideDown</string>
+        <string>UIInterfaceOrientationLandscapeLeft</string>
+        <string>UIInterfaceOrientationLandscapeRight</string>
+    </array>
 </dict>
 </plist>

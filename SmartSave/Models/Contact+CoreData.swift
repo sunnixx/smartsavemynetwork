@@ -10,6 +10,8 @@ public class Contact: NSManagedObject {
     @NSManaged public var email: String?
     @NSManaged public var phone: String?
     @NSManaged public var cardImagePath: String?
+    @NSManaged public var cnContactIdentifier: String?
+    @NSManaged public var photoAssetIdentifier: String?
     @NSManaged public var createdAt: Date?
     @NSManaged public var conversationNotes: String?
     @NSManaged public var nextSteps: String?
@@ -21,4 +23,3 @@ extension Contact {
         return NSFetchRequest<Contact>(entityName: "Contact")
     }
 }
-

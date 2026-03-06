@@ -53,6 +53,21 @@ class ContactDetailViewModel: ObservableObject {
             NotificationService.cancel(contactID: id)
         }
 
+        // Sync edits back to device Contacts
+        if let cnId = contact.cnContactIdentifier {
+            try? ContactSyncService.updateDeviceContact(
+                identifier: cnId,
+                name: name,
+                title: title.isEmpty ? nil : title,
+                company: company.isEmpty ? nil : company,
+                email: email.isEmpty ? nil : email,
+                phone: phone.isEmpty ? nil : phone,
+                conversationNotes: conversationNotes.isEmpty ? nil : conversationNotes,
+                nextSteps: nextSteps.isEmpty ? nil : nextSteps,
+                followUpDate: followUpDate
+            )
+        }
+
         persistence.save()
         onSave()
     }

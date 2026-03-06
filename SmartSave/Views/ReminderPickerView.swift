@@ -7,7 +7,7 @@ struct ReminderPickerView: View {
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 24) {
+            VStack(spacing: 16) {
                 DatePicker(
                     "Follow-up Date",
                     selection: $pickedDate,
@@ -15,7 +15,8 @@ struct ReminderPickerView: View {
                     displayedComponents: [.date, .hourAndMinute]
                 )
                 .datePickerStyle(.graphical)
-                .padding()
+                .tint(.accentColor)
+                .padding(.horizontal)
 
                 Spacer()
             }
@@ -30,6 +31,7 @@ struct ReminderPickerView: View {
                         selectedDate = pickedDate
                         onConfirm()
                     }
+                    .fontWeight(.semibold)
                 }
             }
         }

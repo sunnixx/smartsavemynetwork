@@ -25,12 +25,11 @@ targets:
         INFOPLIST_FILE: SmartSave/Info.plist
         PRODUCT_NAME: SmartSave
         PRODUCT_BUNDLE_IDENTIFIER: com.smartsave.app
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
     coreDataModels:
       - SmartSave/Models/SmartSave.xcdatamodeld
     entitlements:
       path: SmartSave/SmartSave.entitlements
-      properties:
-        com.apple.developer.speech-recognition: true
 
   SmartSaveTests:
     type: bundle.unit-test

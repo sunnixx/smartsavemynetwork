@@ -1,7 +1,7 @@
 import CoreData
 
 final class PersistenceController: @unchecked Sendable {
-    nonisolated(unsafe) static let shared = PersistenceController()
+    static let shared = PersistenceController()
 
     let container: NSPersistentContainer
 
@@ -49,5 +49,35 @@ final class PersistenceController: @unchecked Sendable {
             )
         }
         return (try? context.fetch(request)) ?? []
+    }
+
+    func importFromDeviceContactsIfNeeded() {
+        let request = Contact.fetchRequest()
+        request.fetchLimit = 1
+        let count = (try? context.count(for: request)) ?? 0
+        guard count == 0 else { return }
+
+        guard let imported = try? ContactSyncService.importFromDeviceContacts(), !imported.isEmpty else { return }
+
+        for item in imported {
+            let contact = Contact(context: context)
+            contact.id = UUID()
+            contact.name = item.name
+            contact.title = item.title
+            contact.company = item.company
+            contact.email = item.email
+            contact.phone = item.phone
+            contact.conversationNotes = item.conversationNotes
+            contact.nextSteps = item.nextSteps
+            contact.followUpDate = item.followUpDate
+            contact.cnContactIdentifier = item.cnIdentifier
+            contact.createdAt = Date()
+
+            if let date = item.followUpDate, date > Date(), let id = contact.id {
+                NotificationService.schedule(contactID: id, contactName: item.name, date: date)
+            }
+        }
+
+        save()
     }
 }

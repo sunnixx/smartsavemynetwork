@@ -18,6 +18,9 @@ class AppDelegate: NSObject, UIApplicationDelegate, @unchecked Sendable {
     nonisolated func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         UNUserNotificationCenter.current().delegate = self
         NotificationService.requestPermission()
+        Task { @MainActor in
+            PersistenceController.shared.importFromDeviceContactsIfNeeded()
+        }
         return true
     }
 }
