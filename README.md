@@ -83,4 +83,4 @@ SmartSave/
 
 ## License
 
-This project is for personal/educational use.
+MIT License. See [LICENSE](LICENSE) for details. Created by [Sunni](https://github.com/sunnixx).
